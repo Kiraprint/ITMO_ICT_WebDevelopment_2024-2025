@@ -7,7 +7,12 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-
+mkdocs = "^1.6.1"
+mkdocs-material = "^9.5.48"
+psycopg2-binary = "^2.9.10"
+django-bootstrap4 = "^24.4"
+psycopg2 = "^2.9.10"
+drf-yasg = "^1.21.8"
 
 [build-system]
 requires = ["poetry-core"]
