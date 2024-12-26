@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "conferences",
     "drf_yasg",
+    'django_extensions',
 ]
 
 MIDDLEWARE = [

@@ -22,7 +22,7 @@ class Conference(models.Model):
         return self.title
 
 class ParticipationCondition(models.Model):
-    conference = models.ForeignKey(Conference, on_delete=models.CASCADE)
+    conference = models.OneToOneField(Conference, on_delete=models.CASCADE)
     conditions = models.TextField()
 
     def __str__(self):
