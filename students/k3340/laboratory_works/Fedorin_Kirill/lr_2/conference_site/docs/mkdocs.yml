@@ -1,0 +1,6 @@
+site_name: Conference Site
+nav:
+    - Home: index.md
+    - 2 lab:
+        - Work steps: work_steps.md
+theme: material
