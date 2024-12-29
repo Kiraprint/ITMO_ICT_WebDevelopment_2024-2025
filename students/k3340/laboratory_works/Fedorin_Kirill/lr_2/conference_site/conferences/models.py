@@ -53,3 +53,12 @@ class PresentationResult(models.Model):
     def __str__(self):
         return f'Result for {self.registration}'
 
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    birthday = models.DateField(null=True, blank=True)
+    work_education = models.CharField(max_length=100, blank=True)
+
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'

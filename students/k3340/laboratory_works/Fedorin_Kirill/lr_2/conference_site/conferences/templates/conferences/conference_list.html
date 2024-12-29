@@ -8,15 +8,18 @@
     <button type="submit" class="btn btn-primary">Search</button>
 </form>
 
-<ul>
+<ul class="list-group mt-3">
     {% for conference in page_obj %}
-        <li>
-            <a href="{% url 'conference_detail' conference.id %}">{{ conference.title }}</a>
+        <li class="list-group-item">
+            <h5><a href="{% url 'conference_detail' conference.id %}">{{ conference.title }}</a></h5>
+            <p>Topics: {{ conference.topics }}</p>
+            <p>Location: {{ conference.location.name }}</p>
+            <p>Dates: {{ conference.start_date }} to {{ conference.end_date }}</p>
         </li>
     {% endfor %}
 </ul>
 
-<div class="pagination">
+<div class="pagination mt-3">
     <span class="step-links">
         {% if page_obj.has_previous %}
             <a href="?page=1{% if query %}&q={{ query }}{% endif %}">&laquo; first</a>

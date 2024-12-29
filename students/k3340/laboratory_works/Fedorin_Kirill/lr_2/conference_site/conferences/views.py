@@ -6,7 +6,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import RegistrationUpdateForm, ReviewForm, UserRegisterForm
-from .models import Conference, Registration
+from .models import Conference, Profile, Registration
 
 
 @login_required
@@ -39,7 +39,7 @@ def conference_detail(request, conference_id):
         'conference': conference,
         'reviews': reviews,
         'participants': participants,
-        'registration_exists': registration_exists,
+        'registration_exists': registration_exists
     })
 
 
@@ -95,14 +95,22 @@ def register_for_conference(request, conference_id):
         messages.info(request, f'You are already registered for {conference.title}.')
     return redirect('conference_detail', conference_id=conference_id)
 
+
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            Profile.objects.create(
+                user=user,
+                first_name=form.cleaned_data.get('first_name'),
+                last_name=form.cleaned_data.get('last_name'),
+                birthday=form.cleaned_data.get('birthday'),
+                work_education=form.cleaned_data.get('work_education')
+            )
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}!')
-            return redirect('login')  # Переадресация на страницу входа
+            return redirect('login')
     else:
         form = UserRegisterForm()
     return render(request, 'conferences/register.html', {'form': form})

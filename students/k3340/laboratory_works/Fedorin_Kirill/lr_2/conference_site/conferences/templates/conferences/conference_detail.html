@@ -7,14 +7,6 @@
 <p>Topics: {{ conference.topics }}</p>
 <p>Period: From {{ conference.start_date }} to {{ conference.end_date }}</p>
 
-{% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
-{% endif %}
-
 {% if user.is_authenticated %}
     {% if registration_exists %}
         <p>You are registered for this conference.</p>
@@ -33,11 +25,11 @@
 {% endif %}
 
 <h3>Participants</h3>
-<ul>
+<ul class="list-group">
     {% for participant in participants %}
-        <li>{{ participant.user.username }}</li>
+        <li class="list-group-item">{{ participant.user.first_name }} {{ participant.user.last_name }}</li>
     {% empty %}
-        <li>No participants yet.</li>
+        <li class="list-group-item">No participants yet.</li>
     {% endfor %}
 </ul>
 
