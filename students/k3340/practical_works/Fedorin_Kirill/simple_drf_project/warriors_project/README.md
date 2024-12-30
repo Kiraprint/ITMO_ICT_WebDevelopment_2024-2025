@@ -23,23 +23,16 @@ Warriors Project - это RESTful API, разработанное на Django и
 2. **Создайте виртуальное окружение и активируйте его:**
 
     ```bash
-    python -m venv venv
-    source venv/bin/activate
+    poetry shell
     ```
 
-3. **Установите зависимости:**
-
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-4. **Выполните миграции:**
+3. **Выполните миграции:**
 
     ```bash
     python manage.py migrate
     ```
 
-5. **Запустите сервер разработки:**
+4. **Запустите сервер разработки:**
 
     ```bash
     python manage.py runserver
