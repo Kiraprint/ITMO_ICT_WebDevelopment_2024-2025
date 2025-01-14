@@ -36,6 +36,8 @@ six = "1.16.0"
 sqlparse = "0.5.2"
 uritemplate = "4.1.1"
 watchdog = "6.0.0"
+djoser = "^2.3.1"
+django-filter = "^24.3"
 
 [build-system]
 requires = ["poetry-core"]
