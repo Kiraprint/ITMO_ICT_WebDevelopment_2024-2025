@@ -17,6 +17,7 @@ class Conference(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     description = models.TextField()
+    participants = models.ManyToManyField(User)
 
     def __str__(self):
         return self.title
@@ -58,6 +59,6 @@ class Profile(models.Model):
     last_name = models.CharField(max_length=30)
     birthday = models.DateField(null=True, blank=True)
     work_education = models.CharField(max_length=100, blank=True)
-
+    participation = models.ManyToManyField(Conference)
     def __str__(self):
         return f'{self.first_name} {self.last_name}'

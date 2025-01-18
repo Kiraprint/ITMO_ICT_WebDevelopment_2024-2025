@@ -1,57 +1,78 @@
-from django.shortcuts import render
-from rest_framework import status
-from rest_framework.generics import RetrieveUpdateDestroyAPIView
-from rest_framework.views import APIView, Response
+from symtable import Class
 
-from .models import Warrior, Skill
-from .serializers import WarriorSerializer, SkillSerializer
+from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from warriors_app.models import Skill
+from warriors_app.models import Warrior
+from warriors_app.serializers import ProfessionSerializer
+from warriors_app.serializers import SkillSerializer
+from warriors_app.serializers import WarriorProfessionSerializer, WarriorSkillsSerializer, WarriorSerializer, WarriorFullSerializer
 
 
-class SkillsGetView(APIView):
-   def get(self, request):
-       skills = Skill.objects.all()
-       serializer = SkillSerializer(skills, many=True)
-       return Response({"Skills": serializer.data})
+class WarriorsAPIView(APIView):
+    def get(self, request):
+        warriors = Warrior.objects.all()
+        serializer = WarriorSerializer(warriors, many=True)
+        return Response({"Warriors": serializer.data})
+
+
+class WarriorAPIView(generics.RetrieveAPIView):
+    queryset = Warrior.objects.all()
+    serializer_class = WarriorFullSerializer
+    lookup_field = 'id'
+
+
+class WarriorProfessionAPIView(APIView):
+    def get(self, request):
+        warriors = Warrior.objects.all()
+        serializer = WarriorProfessionSerializer(warriors, many=True)
+        return Response({"Warriors": serializer.data})
+
+
+class WarriorSkillsAPIView(APIView):
+    def get(self, request):
+        warriors = Warrior.objects.all()
+        serializer = WarriorSkillsSerializer(warriors, many=True)
+        return Response({"Warriors": serializer.data})
+
+class ProfessionCreateView(APIView):
+
+    def post(self, request):
+        profession = request.data.get("profession")
+        serializer = ProfessionSerializer(data=profession)
+
+        if serializer.is_valid(raise_exception=True):
+            profession_saved = serializer.save()
+
+        return Response({"Success": "Profession '{}' created succesfully.".format(profession_saved.title)})
+
+
+class SkillAPIView(APIView):
+    def get(self, request):
+        skills = Skill.objects.all()
+        serializer = SkillSerializer(skills, many=True)
+        return Response({"Skills": serializer.data})
 
 
 class SkillCreateView(APIView):
+    def post(self, request):
+        skill = request.data.get("skill")
+        serializer = SkillSerializer(data=skill)
 
-   def post(self, request):
-       skill = request.data.get("skill")
-       serializer = SkillSerializer(data=skill)
+        if serializer.is_valid(raise_exception=True):
+            skill_saved = serializer.save()
 
-       if serializer.is_valid(raise_exception=True):
-           skill_saved = serializer.save()
+        return Response({"Success": "Skill '{}' created succesfully.".format(skill_saved.title)})
 
-       return Response({"Success": "Skill '{}' created succesfully.".format(skill_saved.title)})
-
-
-class WarriorListWithProfessionAPIView(APIView):
-    def get(self, request):
-        warriors = Warrior.objects.select_related('profession').all()
-        serializer = WarriorSerializer(warriors, many=True)
-        return Response(serializer.data)
-
-
-class WarriorListWithSkillsAPIView(APIView):
-    def get(self, request):
-        warriors = Warrior.objects.prefetch_related('skill').all()
-        serializer = WarriorSerializer(warriors, many=True)
-        return Response(serializer.data)
-
-
-class WarriorDetailAPIView(RetrieveUpdateDestroyAPIView):
-    queryset = Warrior.objects.prefetch_related('skill').select_related('profession')
+class WarriorDeleteView(generics.DestroyAPIView):
+    queryset = Warrior.objects.all()
     serializer_class = WarriorSerializer
+    lookup_field = 'id'
 
-    def delete(self, request, *args, **kwargs):
-        warrior = self.get_object()
-        warrior.delete()
-        return Response({"message": "Warrior deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
 
-    def put(self, request, *args, **kwargs):
-        warrior = self.get_object()
-        serializer = self.serializer_class(warrior, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
+class WarriorUpdateView(generics.UpdateAPIView):
+    queryset = Warrior.objects.all()
+    serializer_class = WarriorSerializer
+    lookup_field = 'id'
+

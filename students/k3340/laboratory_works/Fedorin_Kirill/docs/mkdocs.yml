@@ -7,6 +7,8 @@ nav:
         - Lab 2: lab2.md
     - 3 lab:
         - Lab 3: lab3.md
+        - Practical Works: pr.md
     - Leetcode:
         - Leetcode: leetcode.md
-theme: material
+theme: 
+    name: material

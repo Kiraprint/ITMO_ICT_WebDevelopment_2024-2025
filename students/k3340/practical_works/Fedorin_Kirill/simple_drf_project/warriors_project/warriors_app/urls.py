@@ -1,14 +1,22 @@
 from django.urls import path
-from .views import *
+from warriors_app.views import ProfessionCreateView
+from warriors_app.views import SkillAPIView, SkillCreateView
+from warriors_app.views import WarriorsAPIView
+from warriors_app.views import WarriorProfessionAPIView
+
+from warriors_app.views import WarriorSkillsAPIView, WarriorAPIView, WarriorDeleteView, WarriorUpdateView
 
 
 app_name = "warriors_app"
 
-
 urlpatterns = [
-   path('skills/', SkillsGetView.as_view()),
-   path('skills/create', SkillCreateView.as_view()),
-   path('warriors/professions/', WarriorListWithProfessionAPIView.as_view(), name='warriors-with-professions'),
-   path('warriors/skills/', WarriorListWithSkillsAPIView.as_view(), name='warriors-with-skills'),
-   path('warriors/<int:pk>/', WarriorDetailAPIView.as_view(), name='warrior-detail'),
+    path('warriors/', WarriorsAPIView.as_view()),
+    path('warriors/<int:id>/', WarriorAPIView.as_view()),
+    path('warriors/<int:id>/delete/', WarriorDeleteView.as_view()),
+    path('warriors/<int:id>/update/', WarriorUpdateView.as_view()),
+    path('warriors/professions', WarriorProfessionAPIView.as_view()),
+    path('warriors/skills', WarriorSkillsAPIView.as_view()),
+    path('professions/create', ProfessionCreateView.as_view()),
+    path('skills/create', SkillCreateView.as_view()),
+    path('skills/', SkillAPIView.as_view())
 ]

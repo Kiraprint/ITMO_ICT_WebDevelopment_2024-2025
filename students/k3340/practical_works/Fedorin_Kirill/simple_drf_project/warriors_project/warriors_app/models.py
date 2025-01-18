@@ -2,7 +2,7 @@ from django.db import models
 
 class Warrior(models.Model):
    """
-   Описание война
+   Описание воина
    """
 
    race_types = (
@@ -41,7 +41,7 @@ class Skill(models.Model):
 
 class SkillOfWarrior(models.Model):
    """
-   Описание умений война
+   Описание умений воина
    """
 
    skill = models.ForeignKey('Skill', verbose_name='Умение', on_delete=models.CASCADE)
