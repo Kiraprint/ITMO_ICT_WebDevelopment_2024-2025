@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'conferences',
 ]
 SITE_ID = 1
-AUTH_USER_MODEL = 'auth.User'
+AUTH_USER_MODEL = 'conferences.CustomUser'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -70,7 +70,11 @@ DJOSER = {
     'SET_USERNAME_RETYPE': True,
     'PASSWORD_RESET_CONFIRM_URL': '#/password-reset/confirm/{uid}/{token}',
     'USERNAME_RESET_CONFIRM_URL': '#/username-reset/confirm/{uid}/{token}',
-    'SERIALIZERS': {},
+    'SERIALIZERS': {
+        'user_create': 'conferences.serializers.CustomUserCreateSerializer',
+        'user': 'conferences.serializers.CustomUserSerializer',
+        'current_user': 'conferences.serializers.CustomUserSerializer',
+        },
 }
 
 MIDDLEWARE = [

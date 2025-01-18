@@ -1,6 +1,10 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+
+class CustomUser(AbstractUser):
+    birthday = models.DateField(null=True, blank=True)
+    work_education = models.CharField(max_length=100, blank=True)
 
 class Location(models.Model):
     name = models.CharField(max_length=255)
@@ -17,7 +21,8 @@ class Conference(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     description = models.TextField()
-    participants = models.ManyToManyField(User)
+    participants = models.ManyToManyField('CustomUser', through='Registration')
+
 
     def __str__(self):
         return self.title
@@ -30,15 +35,16 @@ class ParticipationCondition(models.Model):
         return f'Conditions for {self.conference.title}'
 
 class Registration(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     conference = models.ForeignKey(Conference, on_delete=models.CASCADE)
     registered_on = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return f'{self.user.username} registered for {self.conference.title}'
 
 class Review(models.Model):
     conference = models.ForeignKey(Conference, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     text = models.TextField()
     rating = models.IntegerField(choices=[(i, str(i)) for i in range(1, 11)])
     date_posted = models.DateTimeField(auto_now_add=True)
@@ -53,12 +59,17 @@ class PresentationResult(models.Model):
     def __str__(self):
         return f'Result for {self.registration}'
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
-    birthday = models.DateField(null=True, blank=True)
-    work_education = models.CharField(max_length=100, blank=True)
-    participation = models.ManyToManyField(Conference)
+class ConferenceDashboard(models.Model):
+    conference = models.OneToOneField(Conference, on_delete=models.CASCADE)
+    total_registrations = models.IntegerField(default=0)
+    average_rating = models.FloatField(default=0.0)
+
+    def update_dashboard(self):
+        registrations = Registration.objects.filter(conference=self.conference).count()
+        self.total_registrations = registrations
+        reviews = Review.objects.filter(conference=self.conference)
+        self.average_rating = reviews.aggregate(models.Avg('rating'))['rating__avg'] or 0.0
+        self.save()
+
     def __str__(self):
-        return f'{self.first_name} {self.last_name}'
+        return f'Dashboard for {self.conference.title}'
