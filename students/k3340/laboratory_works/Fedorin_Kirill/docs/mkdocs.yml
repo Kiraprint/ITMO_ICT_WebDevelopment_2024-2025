@@ -8,6 +8,8 @@ nav:
     - 3 lab:
         - Lab 3: lab3.md
         - Practical Works: pr.md
+    - 4 lab:
+        - Lab 4: lab4.md
     - Leetcode:
         - Leetcode: leetcode.md
 theme: 
