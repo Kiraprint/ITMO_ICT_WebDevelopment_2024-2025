@@ -38,6 +38,7 @@ uritemplate = "4.1.1"
 watchdog = "6.0.0"
 djoser = "^2.3.1"
 django-filter = "^24.3"
+django-cors-headers = "^4.6.0"
 
 [build-system]
 requires = ["poetry-core"]
